@@ -1,0 +1,38 @@
+name: lb-servers
+description: "Blah"
+display-name: "lb"
+namespace: com.example.stylebooks
+schema-version: "1.0"
+version: "0.1"
+import-stylebooks:
+  -
+    namespace: netscaler.nitro.config
+    prefix: ns 
+    version: "10.5"
+parameters:
+  -
+    name: name
+    type: string
+    required: true
+
+  -
+    name: ip 
+    type: ipaddress
+    require: true
+  -
+    name: lb-alg
+    type: string
+    allow-values:
+        - ROUNDROBIN
+        - LEASTCONNECTION
+    defaults: ROUNDROBIN
+components:
+  -
+    name: my-lbvserver-comp
+    type: ns::lbvserver 
+    properties:
+      name: $parameters.name 
+      servicetype: HTTP
+      ipv46: $parameters.ip 
+      port: 80
+      lbmethod: $parameters.lb-alg
